@@ -1,0 +1,19 @@
+# Python / Django
+venv/
+__pycache__/
+*.pyc
+db.sqlite3
+*.sqlite3
+*.log
+
+# Node / React
+node_modules/
+build/
+.env
+.DS_Store
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
