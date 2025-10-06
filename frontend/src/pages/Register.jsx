@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import "../App.css";
 
 export default function Register() {
@@ -13,6 +11,7 @@ export default function Register() {
     password: "",
     role: "student",
   });
+
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -25,43 +24,44 @@ export default function Register() {
       alert("Registered successfully!");
       navigate("/login");
     } catch (error) {
-      alert(
-        "Registration failed: " + JSON.stringify(error.response?.data || error)
-      );
+      alert("Registration failed: " + JSON.stringify(error.response?.data));
     }
   };
 
   return (
-    <>
-      <Header />
-      <div className="register-container">
-        <h2>Register</h2>
-        <form onSubmit={handleRegister}>
-          <input
-            name="username"
-            placeholder="Username"
-            onChange={handleChange}
-          />
-          <input name="email" placeholder="Email" onChange={handleChange} />
-          <input
-            name="full_name"
-            placeholder="Full Name"
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-          />
-          <select name="role" onChange={handleChange}>
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-          </select>
-          <button type="submit">Register</button>
-        </form>
-      </div>
-      <Footer />
-    </>
+    <div className="form-page">
+      <h2>Register</h2>
+      <form onSubmit={handleRegister} className="form-box">
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          onChange={handleChange}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="full_name"
+          placeholder="Full Name"
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          onChange={handleChange}
+        />
+        <select name="role" onChange={handleChange}>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
+        <button type="submit">Register</button>
+      </form>
+    </div>
   );
 }

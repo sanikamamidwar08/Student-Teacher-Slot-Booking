@@ -4,11 +4,11 @@ import "../App.css";
 export default function Header() {
   return (
     <header className="header">
-      <div className="logo">SlotBooking</div>
+      <h1>Slot Booking System</h1>
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/register">Register</Link>
         <Link to="/login">Login</Link>
+        <Link to="/register">Register</Link>
       </nav>
     </header>
   );

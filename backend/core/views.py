@@ -1,6 +1,9 @@
 from rest_framework import generics, permissions
-from .serializers import RegisterSerializer, TimeSlotSerializer, BookingSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+from .serializers import RegisterSerializer, TimeSlotSerializer, BookingSerializer, UserSerializer
+
 from .models import TimeSlot, Booking
 
 User = get_user_model()
@@ -53,3 +56,11 @@ class MyBookingsView(generics.ListAPIView):
 
     def get_queryset(self):
         return Booking.objects.filter(student=self.request.user)
+
+# Current logged-in user info
+class CurrentUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
