@@ -11,17 +11,43 @@ export default function TeacherDashboard() {
 
   return (
     <div className="teacher-dashboard">
-      <aside className="sidebar">
-        <h2>Teacher Dashboard</h2>
+      {/* Navbar */}
+      <nav className="teacher-navbar">
         <ul>
-          <li onClick={() => setActivePage("view")}>📅 View Schedule</li>
-          <li onClick={() => setActivePage("update")}>➕ Update Schedule</li>
-          <li onClick={() => setActivePage("change")}>✏️ Change Schedule</li>
-          <li onClick={() => setActivePage("bookings")}>📖 View Bookings</li>
-          <li onClick={() => setActivePage("notifications")}>🔔 Notifications</li>
+          <li
+            className={activePage === "view" ? "active" : ""}
+            onClick={() => setActivePage("view")}
+          >
+            📅 View Schedule
+          </li>
+          <li
+            className={activePage === "update" ? "active" : ""}
+            onClick={() => setActivePage("update")}
+          >
+            ➕ Update Schedule
+          </li>
+          <li
+            className={activePage === "change" ? "active" : ""}
+            onClick={() => setActivePage("change")}
+          >
+            ✏️ Change Schedule
+          </li>
+          <li
+            className={activePage === "bookings" ? "active" : ""}
+            onClick={() => setActivePage("bookings")}
+          >
+            📖 View Bookings
+          </li>
+          <li
+            className={activePage === "notifications" ? "active" : ""}
+            onClick={() => setActivePage("notifications")}
+          >
+            🔔 Notifications
+          </li>
         </ul>
-      </aside>
+      </nav>
 
+      {/* Page Content */}
       <main className="dashboard-content">
         {activePage === "view" && <ViewSchedule />}
         {activePage === "update" && <UpdateSchedule />}
