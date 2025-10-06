@@ -34,3 +34,11 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.student.username} booked {self.slot}"
+
+class Notification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications")
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.message}"

@@ -4,8 +4,8 @@ import Footer from "./components/Footer";
 import Home from "./pages/home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import TeacherDashboard from "./pages/TeacherDashboard";
-import StudentDashboard from "./pages/StudentDashboard";
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import StudentDashboard from "./pages/student/StudentDashboard";
 
 function App() {
   return (

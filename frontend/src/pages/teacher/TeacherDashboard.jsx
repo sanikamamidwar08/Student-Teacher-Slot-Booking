@@ -1,18 +1,29 @@
-import { useState } from "react";
-import ViewSchedule from "../pages/teacher/ViewSchedule";
-import UpdateSchedule from "../pages/teacher/UpdateSchedule";
-import ChangeSchedule from "../pages/teacher/ChangeSchedule";
-import ViewBookings from "../pages/teacher/ViewBookings";
-import Notifications from "../pages/teacher/Notifications";
-import "../App.css";
+// src/pages/teacher/TeacherDashboard.jsx
+import { useState, useEffect } from "react";
+import ViewSchedule from "./ViewSchedule";
+import UpdateSchedule from "./UpdateSchedule";
+import ChangeSchedule from "./ChangeSchedule";
+import ViewBookings from "./ViewBookings";
+import Notifications from "./Notifications";
+import "../../App.css";
+import axios from "axios";
 
 export default function TeacherDashboard() {
   const [activePage, setActivePage] = useState("view");
+  const [message, setMessage] = useState("");
+
+  const token = localStorage.getItem("access_token");
+  if (token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  useEffect(() => {
+    if (!token) setMessage("⚠️ No access token found. Please login.");
+  }, [token]);
 
   return (
-    <div className="teacher-dashboard">
-      {/* Navbar */}
-      <nav className="teacher-navbar">
+    <div className="dashboard-container">
+      {/* Sidebar */}
+      <aside className="dashboard-sidebar">
+        <h2>Teacher Dashboard</h2>
         <ul>
           <li
             className={activePage === "view" ? "active" : ""}
@@ -45,10 +56,12 @@ export default function TeacherDashboard() {
             🔔 Notifications
           </li>
         </ul>
-      </nav>
+      </aside>
 
-      {/* Page Content */}
+      {/* Main Content */}
       <main className="dashboard-content">
+        {message && <p style={{ color: "red" }}>{message}</p>}
+
         {activePage === "view" && <ViewSchedule />}
         {activePage === "update" && <UpdateSchedule />}
         {activePage === "change" && <ChangeSchedule />}

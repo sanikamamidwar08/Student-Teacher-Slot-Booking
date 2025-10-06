@@ -1,3 +1,4 @@
+// src/pages/Register.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,20 +12,30 @@ export default function Register() {
     password: "",
     role: "student",
   });
+  const [message, setMessage] = useState(""); // success/error message
 
   const navigate = useNavigate();
 
+  // Input change handler
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Form submit handler
   const handleRegister = async (e) => {
     e.preventDefault();
+    setMessage(""); // clear previous message
     try {
-      await axios.post("/api/register/", form);
-      alert("Registered successfully!");
-      navigate("/login");
+      const res = await axios.post("http://127.0.0.1:8000/api/register/", form, {
+        headers: { "Content-Type": "application/json" },
+      });
+      setMessage("✅ Registered successfully! Please login.");
+      setTimeout(() => navigate("/login"), 1500); // redirect to login after 1.5s
     } catch (error) {
-      alert("Registration failed: " + JSON.stringify(error.response?.data));
+      console.error("Registration Error:", error);
+      const errMsg = error.response?.data
+        ? JSON.stringify(error.response.data)
+        : "Server error";
+      setMessage("❌ Registration failed: " + errMsg);
     }
   };
 
@@ -32,11 +43,13 @@ export default function Register() {
     <div className="register-page">
       <div className="register-card">
         <h2>Create Account</h2>
+        {message && <p style={{ color: message.startsWith("✅") ? "green" : "red" }}>{message}</p>}
         <form onSubmit={handleRegister} className="form-box">
           <input
             type="text"
             name="username"
             placeholder="Username"
+            value={form.username}
             onChange={handleChange}
             required
           />
@@ -44,6 +57,7 @@ export default function Register() {
             type="email"
             name="email"
             placeholder="Email"
+            value={form.email}
             onChange={handleChange}
             required
           />
@@ -51,6 +65,7 @@ export default function Register() {
             type="text"
             name="full_name"
             placeholder="Full Name"
+            value={form.full_name}
             onChange={handleChange}
             required
           />
@@ -58,10 +73,11 @@ export default function Register() {
             type="password"
             name="password"
             placeholder="Password"
+            value={form.password}
             onChange={handleChange}
             required
           />
-          <select name="role" onChange={handleChange}>
+          <select name="role" value={form.role} onChange={handleChange}>
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
           </select>
