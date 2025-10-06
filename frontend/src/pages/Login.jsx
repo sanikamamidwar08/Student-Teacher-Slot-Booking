@@ -18,39 +18,42 @@ export default function Login() {
       localStorage.setItem("access_token", res.data.access);
       localStorage.setItem("refresh_token", res.data.refresh);
 
-      // fetch current user
       const profileRes = await axios.get("/api/me/", {
-        headers: {
-          Authorization: `Bearer ${res.data.access}`,
-        },
+        headers: { Authorization: `Bearer ${res.data.access}` },
       });
 
       const role = profileRes.data.role;
       if (role === "teacher") navigate("/teacher/dashboard");
       else navigate("/student/dashboard");
     } catch (error) {
-      alert("Login failed: " + JSON.stringify(error.response?.data || error));
+      alert(
+        "Login failed: " + JSON.stringify(error.response?.data || error)
+      );
     }
   };
 
   return (
-    <div className="form-page">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin} className="form-box">
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-page">
+      <div className="login-card">
+        <h2>Login</h2>
+        <form onSubmit={handleLogin} className="form-box">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
 }
