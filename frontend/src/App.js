@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Logout from "./pages/Logout";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import StudentDashboard from "./pages/student/StudentDashboard";
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
         <Route path="/student/dashboard" element={<StudentDashboard />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
       <Footer />
     </Router>

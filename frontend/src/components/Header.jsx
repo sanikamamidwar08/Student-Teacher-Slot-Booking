@@ -11,6 +11,7 @@ export default function Header() {
         <Link to="/register">Register</Link>
         <Link to="/teacher/dashboard">Teacher Dashboard</Link>
         <Link to="/student/dashboard">Student Dashboard</Link>
+        <Link to="/logout">Logout</Link>
       </nav>
     </header>
   );
