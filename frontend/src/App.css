@@ -28,7 +28,7 @@ header.header nav a:hover {
 
 footer.footer {
   text-align: center;
-  padding: 10px;
+  padding: 5px;
   background-color: #1f2937;
   color: #fff;
   position: fixed;
@@ -233,4 +233,22 @@ footer.footer {
 
 .slot-item button:hover {
   background-color: #2563eb;
+}
+.has-slot {
+  background-color: #90ee90 !important; /* Highlight dates with slots */
+}
+.calendar-container {
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+/*student dashboard*/
+.has-slot {
+  background-color: #90ee90 !important; /* Available slots */
+}
+.my-booking {
+  background-color: #87cefa !important; /* Student bookings */
+}
+.calendar-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
