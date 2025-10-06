@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
 
@@ -29,39 +29,48 @@ export default function Register() {
   };
 
   return (
-    <div className="form-page">
-      <h2>Register</h2>
-      <form onSubmit={handleRegister} className="form-box">
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="full_name"
-          placeholder="Full Name"
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
-        <select name="role" onChange={handleChange}>
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-        </select>
-        <button type="submit">Register</button>
-      </form>
+    <div className="register-page">
+      <div className="register-card">
+        <h2>Create Account</h2>
+        <form onSubmit={handleRegister} className="form-box">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="full_name"
+            placeholder="Full Name"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
+          <select name="role" onChange={handleChange}>
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+          </select>
+          <button type="submit">Register</button>
+        </form>
+        <p className="login-link">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
 }
