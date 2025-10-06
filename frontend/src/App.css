@@ -1,0 +1,181 @@
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.header .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header nav a {
+  margin-left: 20px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.header nav a:hover {
+  text-decoration: underline;
+}
+/* Footer */
+.footer {
+  text-align: center;
+  background-color: #1e3a8a;
+  color: white;
+  padding: 15px 0;
+  margin-top: 50px;
+  font-family: 'Arial', sans-serif;
+}
+.home-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 120px); /* adjust for header+footer */
+  background: linear-gradient(to right, #93c5fd, #3b82f6); /* light blue gradient */
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  color: white;
+}
+
+.home-content h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.home-content p {
+  font-size: 18px;
+  max-width: 600px;
+  margin: auto;
+}
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 120px);
+  background: #f3f4f6;
+  font-family: 'Arial', sans-serif;
+}
+
+.register-container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+}
+
+.register-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 300px;
+  padding: 30px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.register-container input,
+.register-container select {
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.register-container button {
+  padding: 12px;
+  background-color: #1e3a8a;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.register-container button:hover {
+  background-color: #2563eb;
+}
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 120px);
+  background: #eef2ff;
+  font-family: 'Arial', sans-serif;
+}
+
+.login-container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 300px;
+  padding: 30px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.login-container input {
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-container button {
+  padding: 12px;
+  background-color: #1e3a8a;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-container button:hover {
+  background-color: #2563eb;
+}
+.dashboard-container {
+  padding: 30px 50px;
+  min-height: calc(100vh - 120px);
+  font-family: 'Arial', sans-serif;
+}
+
+.dashboard-container h2 {
+  color: #1e3a8a;
+  margin-bottom: 15px;
+}
+
+.slots, .bookings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.slot-card, .booking-card {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 15px;
+  width: 250px;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.slot-card p, .booking-card p {
+  margin: 5px 0;
+}
