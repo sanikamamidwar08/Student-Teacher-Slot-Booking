@@ -31,9 +31,12 @@ class UserSerializer(serializers.ModelSerializer):
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot
-        fields = '__all__'
+        fields = ('id', 'date', 'start_time', 'end_time', 'topic', 'is_booked')
+        read_only_fields = ('id', 'is_booked')
 
 class BookingSerializer(serializers.ModelSerializer):
+    student = serializers.PrimaryKeyRelatedField(read_only=True)  # ← Fix here
+
     class Meta:
         model = Booking
         fields = '__all__'

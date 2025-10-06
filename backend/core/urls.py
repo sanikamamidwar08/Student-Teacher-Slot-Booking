@@ -6,7 +6,7 @@ from .views import (
     AvailableSlotsView,
     BookingCreateView,
     MyBookingsView,
-    CurrentUserView,  # add this
+    CurrentUserView,
 )
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 

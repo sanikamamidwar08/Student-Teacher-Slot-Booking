@@ -9,6 +9,8 @@ export default function Header() {
         <Link to="/">Home</Link>
         <Link to="/login">Login</Link>
         <Link to="/register">Register</Link>
+        <Link to="/teacher/dashboard">Teacher Dashboard</Link>
+        <Link to="/student/dashboard">Student Dashboard</Link>
       </nav>
     </header>
   );

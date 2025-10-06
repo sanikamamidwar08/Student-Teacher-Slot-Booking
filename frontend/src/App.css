@@ -10,7 +10,7 @@ header.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 10px 30px;
   background-color: #1f2937;
   color: #fff;
 }
@@ -28,7 +28,7 @@ header.header nav a:hover {
 
 footer.footer {
   text-align: center;
-  padding: 15px;
+  padding: 10px;
   background-color: #1f2937;
   color: #fff;
   position: fixed;
@@ -201,6 +201,8 @@ footer.footer {
 }
 .dashboard-page {
   padding: 30px;
+  margin-left: 500px;
+  align-items: center;
 }
 
 .slot-list {

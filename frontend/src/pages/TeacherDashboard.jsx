@@ -8,14 +8,16 @@ export default function TeacherDashboard() {
 
   const token = localStorage.getItem("access_token");
 
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
+
   const fetchSlots = async () => {
     try {
-      const res = await axios.get("/api/slots/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get("http://127.0.0.1:8000/api/teacher/slots/");
       setSlots(res.data);
     } catch (err) {
-      console.log(err);
+      console.log("Error fetching slots:", err.response || err);
     }
   };
 
@@ -26,19 +28,27 @@ export default function TeacherDashboard() {
   const handleAddSlot = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/slots/", newSlot, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const [hours, minutes] = newSlot.time.split(":").map(Number);
+      const end = new Date();
+      end.setHours(hours);
+      end.setMinutes(minutes + Number(newSlot.duration));
+
+      const payload = {
+        date: newSlot.date,
+        start_time: newSlot.time,
+        end_time: `${String(end.getHours()).padStart(2,"0")}:${String(end.getMinutes()).padStart(2,"0")}`,
+        topic: newSlot.topic,
+      };
+
+      await axios.post("http://127.0.0.1:8000/api/teacher/slots/", payload);
       fetchSlots();
       setNewSlot({ date: "", time: "", duration: 30, topic: "" });
     } catch (err) {
-      console.log(err);
+      console.log("Error adding slot:", err.response || err);
     }
   };
 
-  useEffect(() => {
-    fetchSlots();
-  }, []);
+  useEffect(() => { fetchSlots(); }, []);
 
   return (
     <div className="dashboard-page">
@@ -55,19 +65,15 @@ export default function TeacherDashboard() {
 
       <h3>My Slots</h3>
       <div className="slot-list">
-        {slots.length === 0 ? (
-          <p>No slots available.</p>
-        ) : (
-          slots.map((slot) => (
-            <div className="slot-item" key={slot.id}>
-              <p>Date: {slot.date}</p>
-              <p>Time: {slot.time}</p>
-              <p>Duration: {slot.duration} mins</p>
-              <p>Topic: {slot.topic || "N/A"}</p>
-              <p>Status: {slot.is_booked ? "Booked" : "Available"}</p>
-            </div>
-          ))
-        )}
+        {slots.length === 0 ? <p>No slots available.</p> : slots.map((slot) => (
+          <div className="slot-item" key={slot.id}>
+            <p>Date: {slot.date}</p>
+            <p>Start: {slot.start_time}</p>
+            <p>End: {slot.end_time}</p>
+            <p>Topic: {slot.topic || "N/A"}</p>
+            <p>Status: {slot.is_booked ? "Booked" : "Available"}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

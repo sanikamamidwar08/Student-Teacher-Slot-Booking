@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer, TimeSlotSerializer, BookingSerializer, UserSerializer
-
 from .models import TimeSlot, Booking
 
 User = get_user_model()
@@ -22,6 +21,7 @@ class TimeSlotListCreateView(generics.ListCreateAPIView):
         return TimeSlot.objects.filter(teacher=self.request.user)
 
     def perform_create(self, serializer):
+        # Set teacher automatically
         serializer.save(teacher=self.request.user)
 
 class TimeSlotDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -44,7 +44,6 @@ class BookingCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(student=self.request.user)
-        # Mark slot as booked
         slot = serializer.validated_data['slot']
         slot.is_booked = True
         slot.save()
