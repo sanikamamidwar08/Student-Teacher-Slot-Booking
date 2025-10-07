@@ -7,6 +7,9 @@ import Register from "./pages/Register";
 import Logout from "./pages/Logout";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import StudentDashboard from "./pages/student/StudentDashboard";
+import ViewTeachers from "./pages/student/ViewTeachers"; 
+import BookSlot from "./pages/student/BookSlot";
+
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
         <Route path="/student/dashboard" element={<StudentDashboard />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/student/view-teachers" element={<ViewTeachers />} />
+        <Route path="/student/book-slot" element={<BookSlot />} />
+      
       </Routes>
       <Footer />
     </Router>

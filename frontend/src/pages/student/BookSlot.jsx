@@ -1,12 +1,25 @@
+// src/pages/student/BookSlot.jsx
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../App.css";
 
-export default function BookSlot({ selectedTeacher }) {
+export default function BookSlot() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Receive teacher data via React Router state
+  const selectedTeacher = location.state?.teacher || null;
+
   const [selectedDate, setSelectedDate] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [bookingForm, setBookingForm] = useState({ purpose: "", topics: "", attachments: null, mode: "video" });
+  const [bookingForm, setBookingForm] = useState({
+    purpose: "",
+    topics: "",
+    attachments: null,
+    mode: "video",
+  });
   const [message, setMessage] = useState("");
 
   const token = localStorage.getItem("access_token");
@@ -15,7 +28,7 @@ export default function BookSlot({ selectedTeacher }) {
   useEffect(() => {
     if (!selectedTeacher || !selectedDate) return;
     const slots = selectedTeacher.slots.filter(
-      slot => slot.date === selectedDate && !slot.is_booked
+      (slot) => slot.date === selectedDate && !slot.is_booked
     );
     setAvailableSlots(slots);
     setSelectedSlot(null);
@@ -46,64 +59,75 @@ export default function BookSlot({ selectedTeacher }) {
       setBookingForm({ purpose: "", topics: "", attachments: null, mode: "video" });
       setSelectedSlot(null);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setMessage("Booking failed. Slot may already be taken.");
     }
   };
 
+  if (!selectedTeacher) {
+    return (
+      <div className="book-slot-page">
+        <p>No teacher selected. Please go back to <span style={{color: 'blue', cursor: 'pointer'}} onClick={() => navigate("/student/view-teachers")}>View Teachers</span>.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="book-slot-page">
-      <h3>Book Slot</h3>
+      <h3>Book Slot for {selectedTeacher.full_name || selectedTeacher.username}</h3>
       {message && <p style={{ color: "green" }}>{message}</p>}
 
-      {selectedTeacher ? (
-        <>
-          <div>
-            <label>Select Date: </label>
-            <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
-          </div>
+      <div>
+        <label>Select Date: </label>
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
+      </div>
 
-          {availableSlots.length > 0 && (
-            <ul>
-              {availableSlots.map(slot => (
-                <li key={slot.id}>
-                  {slot.start_time} - {slot.end_time} | {slot.topic || "N/A"}
-                  <button onClick={() => setSelectedSlot(slot)}>Select</button>
-                </li>
-              ))}
-            </ul>
-          )}
+      {availableSlots.length > 0 && (
+        <ul>
+          {availableSlots.map((slot) => (
+            <li key={slot.id}>
+              {slot.start_time} - {slot.end_time} | {slot.topic || "N/A"}
+              <button onClick={() => setSelectedSlot(slot)}>Select</button>
+            </li>
+          ))}
+        </ul>
+      )}
 
-          {selectedSlot && (
-            <form className="form-box" onSubmit={handleBookingSubmit}>
-              <h4>Booking for {selectedSlot.date} {selectedSlot.start_time}-{selectedSlot.end_time}</h4>
-              <input
-                type="text"
-                name="purpose"
-                value={bookingForm.purpose}
-                onChange={handleFormChange}
-                placeholder="Purpose"
-                required
-              />
-              <input
-                type="text"
-                name="topics"
-                value={bookingForm.topics}
-                onChange={handleFormChange}
-                placeholder="Topics/Questions"
-              />
-              <input type="file" name="attachments" onChange={handleFormChange} />
-              <select name="mode" value={bookingForm.mode} onChange={handleFormChange}>
-                <option value="video">Video Call</option>
-                <option value="offline">Offline</option>
-              </select>
-              <button type="submit">Confirm Booking</button>
-              <button type="button" onClick={() => setSelectedSlot(null)}>Cancel</button>
-            </form>
-          )}
-        </>
-      ) : (
-        <p>Please select a teacher first.</p>
+      {selectedSlot && (
+        <form className="form-box" onSubmit={handleBookingSubmit}>
+          <h4>
+            Booking for {selectedSlot.date} {selectedSlot.start_time}-
+            {selectedSlot.end_time}
+          </h4>
+          <input
+            type="text"
+            name="purpose"
+            value={bookingForm.purpose}
+            onChange={handleFormChange}
+            placeholder="Purpose"
+            required
+          />
+          <input
+            type="text"
+            name="topics"
+            value={bookingForm.topics}
+            onChange={handleFormChange}
+            placeholder="Topics/Questions"
+          />
+          <input type="file" name="attachments" onChange={handleFormChange} />
+          <select name="mode" value={bookingForm.mode} onChange={handleFormChange}>
+            <option value="video">Video Call</option>
+            <option value="offline">Offline</option>
+          </select>
+          <button type="submit">Confirm Booking</button>
+          <button type="button" onClick={() => setSelectedSlot(null)}>
+            Cancel
+          </button>
+        </form>
       )}
     </div>
   );

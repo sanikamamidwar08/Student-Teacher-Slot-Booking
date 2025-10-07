@@ -23,10 +23,22 @@ export default function MyBookings() {
     if (token) fetchMyBookings();
   }, [token]);
 
+  // Cancel a booking
+  const handleCancel = async (bookingId) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/student/bookings/${bookingId}/`);
+      setBookings(bookings.filter(b => b.id !== bookingId));
+      setMessage("Booking canceled successfully.");
+    } catch (err) {
+      console.error(err);
+      setMessage("Failed to cancel booking.");
+    }
+  };
+
   return (
     <div className="my-bookings-page">
       <h3>My Bookings</h3>
-      {message && <p style={{ color: "red" }}>{message}</p>}
+      {message && <p style={{ color: "green" }}>{message}</p>}
 
       {bookings.length === 0 ? (
         <p>No bookings yet.</p>
@@ -40,6 +52,7 @@ export default function MyBookings() {
               <th>End</th>
               <th>Topic</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -51,6 +64,10 @@ export default function MyBookings() {
                 <td>{b.end_time}</td>
                 <td>{b.topic || "N/A"}</td>
                 <td>{b.status}</td>
+                <td>
+                  <button onClick={() => handleCancel(b.id)}>Cancel</button>
+                  {/* You can add a "Reschedule" button here */}
+                </td>
               </tr>
             ))}
           </tbody>

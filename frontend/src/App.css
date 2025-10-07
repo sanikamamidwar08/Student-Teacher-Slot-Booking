@@ -1,16 +1,16 @@
 /* Header */
 .body {
-  margin: 0;
+  
   font-family: Arial, sans-serif;
-  background-color: #f3f4f6;
-  color: #111;
+  
+ 
 }
 
 header.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px;
+  padding: 5px 30px;
   background-color: #1f2937;
   color: #fff;
 }
@@ -28,7 +28,7 @@ header.header nav a:hover {
 
 footer.footer {
   text-align: center;
-  padding: 5px;
+  padding: 1px;
   background-color: #1f2937;
   color: #fff;
   position: fixed;
@@ -362,4 +362,36 @@ footer.footer {
 p {
   font-size: 14px;
   margin-top: 10px;
+}
+
+
+
+
+/* view teacher slots page */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.filters input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.teacher-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+.teacher-slots {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f1f1f1;
 }
