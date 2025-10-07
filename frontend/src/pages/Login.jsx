@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault();
     setMessage("");
     try {
-      // JWT Token request
+      // Request JWT token
       const res = await axios.post("http://127.0.0.1:8000/api/token/", form, {
         headers: { "Content-Type": "application/json" },
       });
@@ -24,17 +24,20 @@ export default function Login() {
       localStorage.setItem("access_token", res.data.access);
       localStorage.setItem("refresh_token", res.data.refresh);
 
-      // Get current user info
+      // Get current user profile
       const profileRes = await axios.get("http://127.0.0.1:8000/api/me/", {
         headers: { Authorization: `Bearer ${res.data.access}` },
       });
 
       const role = profileRes.data.role;
-      setMessage("✅ Login successful!");
+      localStorage.setItem("role", role); // save role for app-wide checks
+
+      setMessage("✅ Login successful! Redirecting...");
+
       setTimeout(() => {
         if (role === "teacher") navigate("/teacher/dashboard");
         else navigate("/student/dashboard");
-      }, 1000);
+      }, 1000); // 1s delay
     } catch (error) {
       console.error("Login Error:", error);
       const errMsg = error.response?.data

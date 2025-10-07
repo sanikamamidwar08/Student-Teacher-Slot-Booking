@@ -8,18 +8,11 @@ export default function BookSlot() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Receive teacher data via React Router state
   const selectedTeacher = location.state?.teacher || null;
 
   const [selectedDate, setSelectedDate] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [bookingForm, setBookingForm] = useState({
-    purpose: "",
-    topics: "",
-    attachments: null,
-    mode: "video",
-  });
   const [message, setMessage] = useState("");
 
   const token = localStorage.getItem("access_token");
@@ -34,40 +27,43 @@ export default function BookSlot() {
     setSelectedSlot(null);
   }, [selectedTeacher, selectedDate]);
 
-  const handleFormChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) setBookingForm({ ...bookingForm, [name]: files[0] });
-    else setBookingForm({ ...bookingForm, [name]: value });
-  };
-
-  const handleBookingSubmit = async (e) => {
-    e.preventDefault();
+  const handleBookingSubmit = async () => {
     if (!selectedSlot) return setMessage("Please select a time slot.");
 
-    const formData = new FormData();
-    formData.append("teacher_slot", selectedSlot.id);
-    formData.append("purpose", bookingForm.purpose);
-    formData.append("topics", bookingForm.topics);
-    formData.append("mode", bookingForm.mode);
-    if (bookingForm.attachments) formData.append("attachments", bookingForm.attachments);
+    // Backend expects 'slot' field
+    const data = {
+      slot: selectedSlot.id,
+      purpose: "Online session",
+      mode: "video",
+    };
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/student/book/", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axios.post("http://127.0.0.1:8000/api/student/book/", data);
       setMessage("Booking successful!");
-      setBookingForm({ purpose: "", topics: "", attachments: null, mode: "video" });
       setSelectedSlot(null);
+      setSelectedDate("");
+      setAvailableSlots([]);
     } catch (err) {
-      console.error(err);
-      setMessage("Booking failed. Slot may already be taken.");
+      console.error("Booking error:", err.response?.data || err.message);
+      setMessage(
+        err.response?.data?.detail || "Booking failed. Slot may already be taken."
+      );
     }
   };
 
   if (!selectedTeacher) {
     return (
       <div className="book-slot-page">
-        <p>No teacher selected. Please go back to <span style={{color: 'blue', cursor: 'pointer'}} onClick={() => navigate("/student/view-teachers")}>View Teachers</span>.</p>
+        <p>
+          No teacher selected. Go back to{" "}
+          <span
+            style={{ color: "blue", cursor: "pointer" }}
+            onClick={() => navigate("/student/view-teachers")}
+          >
+            View Teachers
+          </span>
+          .
+        </p>
       </div>
     );
   }
@@ -98,36 +94,18 @@ export default function BookSlot() {
       )}
 
       {selectedSlot && (
-        <form className="form-box" onSubmit={handleBookingSubmit}>
+        <div className="form-box">
           <h4>
             Booking for {selectedSlot.date} {selectedSlot.start_time}-
             {selectedSlot.end_time}
           </h4>
-          <input
-            type="text"
-            name="purpose"
-            value={bookingForm.purpose}
-            onChange={handleFormChange}
-            placeholder="Purpose"
-            required
-          />
-          <input
-            type="text"
-            name="topics"
-            value={bookingForm.topics}
-            onChange={handleFormChange}
-            placeholder="Topics/Questions"
-          />
-          <input type="file" name="attachments" onChange={handleFormChange} />
-          <select name="mode" value={bookingForm.mode} onChange={handleFormChange}>
-            <option value="video">Video Call</option>
-            <option value="offline">Offline</option>
-          </select>
-          <button type="submit">Confirm Booking</button>
+          <p>Purpose: Online session</p>
+          <p>Mode: Video Call</p>
+          <button onClick={handleBookingSubmit}>Confirm Booking</button>
           <button type="button" onClick={() => setSelectedSlot(null)}>
             Cancel
           </button>
-        </form>
+        </div>
       )}
     </div>
   );

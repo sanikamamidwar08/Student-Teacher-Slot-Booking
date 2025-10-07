@@ -10,7 +10,7 @@ export default function Register() {
     email: "",
     full_name: "",
     password: "",
-    role: "student",
+    role: "student", // default role
   });
   const [message, setMessage] = useState(""); // success/error message
 
@@ -28,8 +28,17 @@ export default function Register() {
       const res = await axios.post("http://127.0.0.1:8000/api/register/", form, {
         headers: { "Content-Type": "application/json" },
       });
-      setMessage("✅ Registered successfully! Please login.");
-      setTimeout(() => navigate("/login"), 1500); // redirect to login after 1.5s
+
+      // Save role to localStorage for dashboard redirect
+      localStorage.setItem("role", form.role);
+
+      setMessage("✅ Registered successfully! Redirecting to dashboard...");
+
+      setTimeout(() => {
+        // Redirect based on role
+        if (form.role === "teacher") navigate("/teacher/dashboard");
+        else navigate("/student/dashboard");
+      }, 1500); // 1.5s delay
     } catch (error) {
       console.error("Registration Error:", error);
       const errMsg = error.response?.data
