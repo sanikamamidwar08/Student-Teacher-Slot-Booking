@@ -1,3 +1,4 @@
+// src/pages/student/MyBookings.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../App.css";
@@ -14,8 +15,8 @@ export default function MyBookings() {
       const res = await axios.get("http://127.0.0.1:8000/api/student/bookings/");
       setBookings(res.data);
     } catch (err) {
-      console.log(err);
-      setMessage("Failed to fetch bookings.");
+      console.error(err);
+      setMessage("❌ Failed to fetch bookings.");
     }
   };
 
@@ -23,22 +24,22 @@ export default function MyBookings() {
     if (token) fetchMyBookings();
   }, [token]);
 
-  // Cancel a booking
   const handleCancel = async (bookingId) => {
+    if (!window.confirm("Are you sure you want to cancel this booking?")) return;
     try {
       await axios.delete(`http://127.0.0.1:8000/api/student/bookings/${bookingId}/`);
-      setBookings(bookings.filter(b => b.id !== bookingId));
-      setMessage("Booking canceled successfully.");
+      setBookings(bookings.filter((b) => b.id !== bookingId));
+      setMessage("✅ Booking canceled successfully.");
     } catch (err) {
       console.error(err);
-      setMessage("Failed to cancel booking.");
+      setMessage("❌ Failed to cancel booking.");
     }
   };
 
   return (
     <div className="my-bookings-page">
       <h3>My Bookings</h3>
-      {message && <p style={{ color: "green" }}>{message}</p>}
+      {message && <p style={{ color: message.includes("❌") ? "red" : "green" }}>{message}</p>}
 
       {bookings.length === 0 ? (
         <p>No bookings yet.</p>
@@ -46,7 +47,7 @@ export default function MyBookings() {
         <table className="slot-table">
           <thead>
             <tr>
-              <th>Teacher Name</th>
+              <th>Teacher</th>
               <th>Date</th>
               <th>Start</th>
               <th>End</th>
@@ -56,17 +57,17 @@ export default function MyBookings() {
             </tr>
           </thead>
           <tbody>
-            {bookings.map(b => (
+            {bookings.map((b) => (
               <tr key={b.id}>
                 <td>{b.teacher_name}</td>
                 <td>{b.date}</td>
                 <td>{b.start_time}</td>
                 <td>{b.end_time}</td>
                 <td>{b.topic || "N/A"}</td>
-                <td>{b.status}</td>
+                <td style={{ color: "green" }}>{b.status}</td>
                 <td>
                   <button onClick={() => handleCancel(b.id)}>Cancel</button>
-                  {/* You can add a "Reschedule" button here */}
+                  {/* Optionally: Reschedule */}
                 </td>
               </tr>
             ))}

@@ -7,7 +7,7 @@ from .serializers import (
     TimeSlotSerializer,
     BookingSerializer,
     UserSerializer,
-    NotificationSerializer
+    NotificationSerializer,
 )
 from .models import TimeSlot, Booking, Notification
 
@@ -32,7 +32,6 @@ class TimeSlotListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(teacher=self.request.user)
-
 
 class TimeSlotDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TimeSlotSerializer
@@ -63,7 +62,7 @@ class BookingCreateView(generics.CreateAPIView):
         slot.save()
 
 # -------------------------
-# Student: My bookings
+# Student: My bookings (list all)
 # -------------------------
 class MyBookingsView(generics.ListAPIView):
     serializer_class = BookingSerializer
@@ -71,6 +70,16 @@ class MyBookingsView(generics.ListAPIView):
 
     def get_queryset(self):
         return Booking.objects.filter(student=self.request.user).select_related('slot', 'student')
+
+# -------------------------
+# Student: My booking detail / delete
+# -------------------------
+class MyBookingDetailView(generics.RetrieveDestroyAPIView):
+    serializer_class = BookingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Booking.objects.filter(student=self.request.user)
 
 # -------------------------
 # Teacher: View bookings for their slots

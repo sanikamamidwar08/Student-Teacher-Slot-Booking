@@ -20,6 +20,8 @@ export default function BookSlot() {
 
   useEffect(() => {
     if (!selectedTeacher || !selectedDate) return;
+
+    // Only show slots for selected date & not booked
     const slots = selectedTeacher.slots.filter(
       (slot) => slot.date === selectedDate && !slot.is_booked
     );
@@ -30,23 +32,21 @@ export default function BookSlot() {
   const handleBookingSubmit = async () => {
     if (!selectedSlot) return setMessage("Please select a time slot.");
 
-    // Backend expects 'slot' field
-    const data = {
-      slot: selectedSlot.id,
-      purpose: "Online session",
-      mode: "video",
-    };
-
     try {
-      await axios.post("http://127.0.0.1:8000/api/student/book/", data);
-      setMessage("Booking successful!");
+      await axios.post("http://127.0.0.1:8000/api/student/book/", {
+        slot: selectedSlot.id,
+        purpose: "Online session",
+        mode: "video",
+      });
+
+      setMessage("✅ Booking successful!");
       setSelectedSlot(null);
       setSelectedDate("");
       setAvailableSlots([]);
     } catch (err) {
-      console.error("Booking error:", err.response?.data || err.message);
+      console.error(err);
       setMessage(
-        err.response?.data?.detail || "Booking failed. Slot may already be taken."
+        err.response?.data?.detail || "❌ Booking failed. Slot may already be taken."
       );
     }
   };
@@ -71,7 +71,7 @@ export default function BookSlot() {
   return (
     <div className="book-slot-page">
       <h3>Book Slot for {selectedTeacher.full_name || selectedTeacher.username}</h3>
-      {message && <p style={{ color: "green" }}>{message}</p>}
+      {message && <p style={{ color: message.includes("❌") ? "red" : "green" }}>{message}</p>}
 
       <div>
         <label>Select Date: </label>
@@ -86,7 +86,7 @@ export default function BookSlot() {
         <ul>
           {availableSlots.map((slot) => (
             <li key={slot.id}>
-              {slot.start_time} - {slot.end_time} | {slot.topic || "N/A"}
+              {slot.start_time} - {slot.end_time} | {slot.topic || "N/A"}{" "}
               <button onClick={() => setSelectedSlot(slot)}>Select</button>
             </li>
           ))}
@@ -96,15 +96,12 @@ export default function BookSlot() {
       {selectedSlot && (
         <div className="form-box">
           <h4>
-            Booking for {selectedSlot.date} {selectedSlot.start_time}-
-            {selectedSlot.end_time}
+            Booking for {selectedSlot.date} {selectedSlot.start_time}-{selectedSlot.end_time}
           </h4>
           <p>Purpose: Online session</p>
           <p>Mode: Video Call</p>
           <button onClick={handleBookingSubmit}>Confirm Booking</button>
-          <button type="button" onClick={() => setSelectedSlot(null)}>
-            Cancel
-          </button>
+          <button onClick={() => setSelectedSlot(null)}>Cancel</button>
         </div>
       )}
     </div>

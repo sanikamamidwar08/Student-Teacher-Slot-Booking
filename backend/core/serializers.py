@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-from .models import TimeSlot, Booking, Notification  # ← Notification add केले
-
+from .models import TimeSlot, Booking, Notification  
 User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -57,7 +56,44 @@ class TimeSlotSerializer(serializers.ModelSerializer):
 
 class BookingSerializer(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(read_only=True)
+    teacher_name = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+    start_time = serializers.SerializerMethodField()
+    end_time = serializers.SerializerMethodField()
+    topic = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = Booking
-        fields = '__all__'
+        fields = (
+            'id',
+            'student',
+            'slot',
+            'purpose',
+            'meeting_link',
+            'booked_at',
+            'teacher_name',
+            'date',
+            'start_time',
+            'end_time',
+            'topic',
+            'status'
+        )
+
+    def get_teacher_name(self, obj):
+        return obj.slot.teacher.full_name or obj.slot.teacher.username
+
+    def get_date(self, obj):
+        return obj.slot.date
+
+    def get_start_time(self, obj):
+        return obj.slot.start_time
+
+    def get_end_time(self, obj):
+        return obj.slot.end_time
+
+    def get_topic(self, obj):
+        return obj.slot.topic or "N/A"
+
+    def get_status(self, obj):
+        return "Booked" if obj.slot.is_booked else "Available"
