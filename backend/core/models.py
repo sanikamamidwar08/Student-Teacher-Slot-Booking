@@ -21,6 +21,7 @@ class TimeSlot(models.Model):
     end_time = models.TimeField()
     topic = models.CharField(max_length=200, blank=True, null=True)
     is_booked = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=True)  # ✅ New field
 
     def __str__(self):
         return f"{self.teacher.username} - {self.date} {self.start_time}-{self.end_time}"

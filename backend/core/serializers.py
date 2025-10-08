@@ -52,7 +52,7 @@ class UserSerializer(serializers.ModelSerializer):
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot
-        fields = ('id', 'date', 'start_time', 'end_time', 'topic', 'is_booked')
+        fields = ('id', 'date', 'start_time', 'end_time', 'topic', 'is_booked', 'is_available')  # ✅ add is_available
         read_only_fields = ('id', 'is_booked')
 
 class BookingSerializer(serializers.ModelSerializer):
