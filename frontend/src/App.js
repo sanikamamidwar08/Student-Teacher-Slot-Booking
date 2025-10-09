@@ -9,6 +9,7 @@ import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import ViewTeachers from "./pages/student/ViewTeachers"; 
 import BookSlot from "./pages/student/BookSlot";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
 

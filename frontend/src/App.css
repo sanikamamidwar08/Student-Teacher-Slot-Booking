@@ -692,3 +692,318 @@ footer.footer {
   background: #95a5a6;
   color: white;
 }
+
+
+
+
+
+/*register page*/
+/* === Page Background === */
+.register-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+  animation: fadeInBg 1s ease-in-out;
+}
+
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* === Register Card === */
+.register-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 40px 50px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: #fff;
+  animation: fadeInCard 0.8s ease-in-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.register-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* === Title === */
+.register-card h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* === Form Layout === */
+.form-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* === Input Wrapper (for icons) === */
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 18px;
+}
+
+/* === Inputs & Select === */
+.form-box input,
+.form-box select {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-box input:focus,
+.form-box select:focus {
+  background: #fff;
+  box-shadow: 0 0 0 2px #6b5bff;
+}
+
+/* === Button === */
+.form-box button {
+  background: linear-gradient(135deg, #6b5bff, #836fff);
+  border: none;
+  color: white;
+  padding: 12px 0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.form-box button:hover {
+  background: linear-gradient(135deg, #5848d6, #7a6cff);
+  transform: translateY(-2px);
+}
+
+/* === Success / Error Message === */
+.register-card p {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* === Login Link === */
+.login-link {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #ffea00;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.login-link a:hover {
+  color: #fff;
+}
+
+/* === Responsive Design === */
+@media (max-width: 480px) {
+  .register-card {
+    padding: 30px 25px;
+  }
+
+  .register-card h2 {
+    font-size: 24px;
+  }
+
+  .input-wrapper i {
+    left: 10px;
+  }
+
+  .form-box input,
+  .form-box select {
+    padding-left: 40px;
+  }
+}
+
+
+
+
+
+/* === LOGIN PAGE === */
+.login-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+  animation: fadeInBg 1s ease-in-out;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 40px 50px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: #fff;
+  animation: fadeInCard 0.8s ease-in-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Title */
+.login-card h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Input Styles */
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 18px;
+}
+
+.form-box input {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-box input:focus {
+  background: #fff;
+  box-shadow: 0 0 0 2px #6b5bff;
+}
+
+/* Button */
+.form-box button {
+  background: linear-gradient(135deg, #6b5bff, #836fff);
+  border: none;
+  color: white;
+  padding: 12px 0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.form-box button:hover {
+  background: linear-gradient(135deg, #5848d6, #7a6cff);
+  transform: translateY(-2px);
+}
+
+/* Message */
+.login-card p {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #fff;
+}
+
+/* Register Link */
+.login-link {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #ffea00;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.login-link a:hover {
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 25px;
+  }
+
+  .login-card h2 {
+    font-size: 24px;
+  }
+
+  .input-wrapper i {
+    left: 10px;
+  }
+
+  .form-box input {
+    padding-left: 40px;
+  }
+}
+
+/* Animations (shared with Register) */
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

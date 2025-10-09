@@ -19,15 +19,15 @@ export default function ViewBookings() {
     const fetchBookings = async () => {
       try {
         const res = await axios.get("http://127.0.0.1:8000/api/teacher/bookings/");
-        // Map bookings for display
+        // Backend already sends student_name, date, start_time etc.
         const mappedBookings = res.data.map((b) => ({
           id: b.id,
-          student_name: b.student.full_name || b.student.username,
-          date: new Date(b.slot.date).toLocaleDateString(),
-          start_time: b.slot.start_time,
-          end_time: b.slot.end_time,
-          topic: b.slot.topic || "N/A",
-          status: b.slot.is_booked ? "Booked" : "Available",
+          student_name: b.student_name,     // ✅ direct from serializer
+          date: b.date,                     // ✅ direct
+          start_time: b.start_time,         // ✅ direct
+          end_time: b.end_time,             // ✅ direct
+          topic: b.topic,                   // ✅ direct
+          status: b.status,                 // ✅ direct
         }));
         setBookings(mappedBookings);
       } catch (err) {

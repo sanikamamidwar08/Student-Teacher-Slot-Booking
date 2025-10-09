@@ -10,7 +10,7 @@ export default function UpdateSchedule() {
     start_time: "",
     duration: "30",
     topic: "",
-    is_available: true, // Checkbox for availability
+    is_available: true,
   });
   const [message, setMessage] = useState("");
 
@@ -23,7 +23,7 @@ export default function UpdateSchedule() {
       setSlots(res.data);
     } catch (err) {
       console.error(err);
-      setMessage("Failed to fetch slots.");
+      setMessage("❌ Failed to fetch slots.");
     }
   };
 
@@ -39,20 +39,21 @@ export default function UpdateSchedule() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Auto-calculate end_time based on start_time + duration
     const [hours, minutes] = formSlot.start_time.split(":").map(Number);
     const duration = Number(formSlot.duration);
     const endDate = new Date();
     endDate.setHours(hours);
     endDate.setMinutes(minutes + duration);
-    const end_time = `${String(endDate.getHours()).padStart(2, "0")}:${String(endDate.getMinutes()).padStart(2, "0")}`;
+    const end_time = `${String(endDate.getHours()).padStart(2, "0")}:${String(
+      endDate.getMinutes()
+    ).padStart(2, "0")}`;
 
     const payload = {
       date: formSlot.date,
       start_time: formSlot.start_time,
       end_time,
       topic: formSlot.topic,
-      is_available: formSlot.is_available, // backend field
+      is_available: formSlot.is_available,
     };
 
     try {
@@ -68,7 +69,7 @@ export default function UpdateSchedule() {
       fetchSlots();
     } catch (err) {
       console.error(err);
-      if (err.response?.status === 401) setMessage("Unauthorized. Please login.");
+      if (err.response?.status === 401) setMessage("❌ Unauthorized. Please login.");
       else setMessage("❌ Failed to add slot.");
     }
   };
@@ -76,14 +77,27 @@ export default function UpdateSchedule() {
   return (
     <div className="update-schedule-page">
       <h3>Update Schedule</h3>
-      {message && <p style={{ color: message.includes("❌") ? "red" : "green" }}>{message}</p>}
+      {message && (
+        <p style={{ color: message.includes("❌") ? "red" : "green" }}>{message}</p>
+      )}
 
-      {/* Form in Center */}
+      {/* Add Slot Form */}
       <form className="form-box update-form" onSubmit={handleSubmit}>
-        <input type="date" name="date" value={formSlot.date} onChange={handleChange} required />
-        <input type="time" name="start_time" value={formSlot.start_time} onChange={handleChange} required />
+        <input
+          type="date"
+          name="date"
+          value={formSlot.date}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="time"
+          name="start_time"
+          value={formSlot.start_time}
+          onChange={handleChange}
+          required
+        />
 
-        {/* Duration Dropdown */}
         <select name="duration" value={formSlot.duration} onChange={handleChange}>
           <option value="30">30 Minutes</option>
           <option value="45">45 Minutes</option>
@@ -98,7 +112,6 @@ export default function UpdateSchedule() {
           placeholder="Topic (optional)"
         />
 
-        {/* Availability Checkbox */}
         <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <input
             type="checkbox"
@@ -112,6 +125,7 @@ export default function UpdateSchedule() {
         <button type="submit">➕ Add Slot</button>
       </form>
 
+      {/* Existing Slots */}
       <h4>Existing Slots</h4>
       <table className="slot-table">
         <thead>
@@ -132,7 +146,13 @@ export default function UpdateSchedule() {
               <td>{slot.end_time}</td>
               <td>{slot.duration || "N/A"} min</td>
               <td>{slot.topic || "N/A"}</td>
-              <td>{slot.is_available ? "✅ Available" : "❌ Unavailable"}</td>
+              <td>
+                {slot.is_booked
+                  ? "📚 Booked by Student"
+                  : slot.is_available
+                  ? "✅ Available"
+                  : "❌ Unavailable"}
+              </td>
             </tr>
           ))}
         </tbody>
