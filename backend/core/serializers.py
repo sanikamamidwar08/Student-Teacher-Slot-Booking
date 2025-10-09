@@ -1,22 +1,26 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-from .models import TimeSlot, Booking, Notification  
+from .models import TimeSlot, Booking, Notification
 
 User = get_user_model()
 
 # -------------------------
-# Register
+# Register Serializer
 # -------------------------
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        validators=[validate_password]
+    )
 
     class Meta:
         model = User
         fields = ('username', 'email', 'full_name', 'password', 'role')
 
     def create(self, validated_data):
-        user = User.objects.create(
+        user = User(
             username=validated_data['username'],
             email=validated_data['email'],
             full_name=validated_data.get('full_name', ''),
@@ -28,7 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 # -------------------------
-# Notifications
+# Notification Serializer
 # -------------------------
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
