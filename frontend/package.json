@@ -14,15 +14,15 @@
     "react-calendar": "^6.0.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.3",
-    "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently \"npm run dev-frontend\" \"npm run start-backend\"",
-    "dev-frontend": "vite",
-    "start-backend": "cd ../backend && venv\\Scripts\\activate && python manage.py runserver",
-    "build": "vite build"
-  },
+  "dev": "vite",                                  
+  "start": "concurrently \"npm run dev\" \"npm run start-backend\"", 
+  "start-backend": "powershell -Command \"cd ../backend; .\\venv\\Scripts\\activate; python manage.py runserver\"",
+  "build": "vite build"
+},
+
   "proxy": "http://127.0.0.1:8000",
   "eslintConfig": {
     "extends": [

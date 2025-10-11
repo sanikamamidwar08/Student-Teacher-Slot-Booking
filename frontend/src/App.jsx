@@ -12,35 +12,63 @@ import BookSlot from "./pages/student/BookSlot";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
-
-  // Protected route for student
-  const StudentRoute = ({ element }) => {
-    const role = localStorage.getItem("role"); // get role here for dynamic check
-    return role === "student" ? element : <Navigate to="/login" />;
+  // Protected route for students
+  const StudentRoute = ({ children }) => {
+    const role = localStorage.getItem("role");
+    return role === "student" ? children : <Navigate to="/login" />;
   };
 
-  // Protected route for teacher
-  const TeacherRoute = ({ element }) => {
-    const role = localStorage.getItem("role"); // get role here for dynamic check
-    return role === "teacher" ? element : <Navigate to="/login" />;
+  // Protected route for teachers
+  const TeacherRoute = ({ children }) => {
+    const role = localStorage.getItem("role");
+    return role === "teacher" ? children : <Navigate to="/login" />;
   };
 
   return (
     <Router>
       <Header />
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout />} />
 
         {/* Teacher Routes */}
-        <Route path="/teacher/dashboard" element={<TeacherRoute element={<TeacherDashboard />} />} />//
+        <Route
+          path="/teacher/dashboard"
+          element={
+            <TeacherRoute>
+              <TeacherDashboard />
+            </TeacherRoute>
+          }
+        />
 
         {/* Student Routes */}
-        <Route path="/student/dashboard" element={<StudentRoute element={<StudentDashboard />} />} />
-        <Route path="/student/view-teachers" element={<StudentRoute element={<ViewTeachers />} />} />
-        <Route path="/student/book-slot" element={<StudentRoute element={<BookSlot />} />} />
+        <Route
+          path="/student/dashboard"
+          element={
+            <StudentRoute>
+              <StudentDashboard />
+            </StudentRoute>
+          }
+        />
+        <Route
+          path="/student/view-teachers"
+          element={
+            <StudentRoute>
+              <ViewTeachers />
+            </StudentRoute>
+          }
+        />
+        <Route
+          path="/student/book-slot"
+          element={
+            <StudentRoute>
+              <BookSlot />
+            </StudentRoute>
+          }
+        />
 
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" />} />
