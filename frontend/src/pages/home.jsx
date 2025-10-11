@@ -1,34 +1,38 @@
 import { useNavigate } from "react-router-dom";
-import "../App.css";
 import heroImage from "../assets/hero.jpg";
+import "../App.css";
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="home-page">
+    <div className="home-page min-h-screen">
       <section
-        className="hero-section relative bg-cover bg-center"
+        className="hero-section relative bg-cover bg-center min-h-screen flex items-center justify-center"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
-        <div className="overlay absolute inset-0 bg-black opacity-50"></div>
-        <div className="hero-text relative z-10 text-center text-white py-40 px-4">
-          <h1 className="fade-in text-4xl md:text-6xl font-bold">
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
+
+        {/* Content */}
+        <div className="relative z-10 text-center text-white px-4">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
             Student–Teacher Slot Booking
           </h1>
-          <p className="fade-in delay-1 mt-4 text-lg md:text-2xl">
+          <p className="text-lg md:text-2xl mb-8 animate-fade-in delay-150">
             Book your slots or manage your teaching schedule effortlessly.
           </p>
-          <div className="hero-buttons fade-in delay-2 mt-8 flex justify-center gap-4">
+
+          <div className="flex justify-center gap-4">
             <button
               onClick={() => navigate("/register")}
-              className="btn-primary px-6 py-2 rounded-lg font-semibold"
+              className="bg-blue-600 hover:bg-blue-700 transition px-6 py-2 rounded-lg font-semibold shadow-lg"
             >
               Get Started
             </button>
             <button
               onClick={() => navigate("/login")}
-              className="btn-secondary px-6 py-2 rounded-lg font-semibold"
+              className="bg-gray-100 text-black hover:bg-gray-200 transition px-6 py-2 rounded-lg font-semibold shadow-lg"
             >
               Login
             </button>

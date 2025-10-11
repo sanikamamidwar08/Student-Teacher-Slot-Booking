@@ -37,42 +37,57 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="my-bookings-page">
-      <h3>My Bookings</h3>
-      {message && <p style={{ color: message.includes("❌") ? "red" : "green" }}>{message}</p>}
+    <div className="max-w-4xl mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">My Bookings</h2>
+
+      {message && (
+        <p
+          className={`mb-4 font-medium ${
+            message.startsWith("❌") ? "text-red-600" : "text-green-600"
+          }`}
+        >
+          {message}
+        </p>
+      )}
 
       {bookings.length === 0 ? (
         <p>No bookings yet.</p>
       ) : (
-        <table className="slot-table">
-          <thead>
-            <tr>
-              <th>Teacher</th>
-              <th>Date</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Topic</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((b) => (
-              <tr key={b.id}>
-                <td>{b.teacher_name}</td>
-                <td>{b.date}</td>
-                <td>{b.start_time}</td>
-                <td>{b.end_time}</td>
-                <td>{b.topic || "N/A"}</td>
-                <td style={{ color: "green" }}>{b.status}</td>
-                <td>
-                  <button onClick={() => handleCancel(b.id)}>Cancel</button>
-                  {/* Optionally: Reschedule */}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-300 rounded-lg">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-4 py-2 border-b">Teacher</th>
+                <th className="px-4 py-2 border-b">Date</th>
+                <th className="px-4 py-2 border-b">Start</th>
+                <th className="px-4 py-2 border-b">End</th>
+                <th className="px-4 py-2 border-b">Topic</th>
+                <th className="px-4 py-2 border-b">Status</th>
+                <th className="px-4 py-2 border-b">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {bookings.map((b) => (
+                <tr key={b.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border-b">{b.teacher_name}</td>
+                  <td className="px-4 py-2 border-b">{b.date}</td>
+                  <td className="px-4 py-2 border-b">{b.start_time}</td>
+                  <td className="px-4 py-2 border-b">{b.end_time}</td>
+                  <td className="px-4 py-2 border-b">{b.topic || "N/A"}</td>
+                  <td className="px-4 py-2 border-b text-green-600">{b.status}</td>
+                  <td className="px-4 py-2 border-b flex gap-2">
+                    <button
+                      onClick={() => handleCancel(b.id)}
+                      className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

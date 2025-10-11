@@ -1,4 +1,4 @@
-// src/pages/teacher/Notifications.jsx
+    // src/pages/teacher/Notifications.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../App.css";
@@ -13,7 +13,7 @@ export default function Notifications() {
   const fetchNotifications = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8000/api/notifications/");
-      setNotifications(res.data.reverse()); // Latest notifications first
+      setNotifications(res.data.reverse()); // Latest first
     } catch (err) {
       console.error("AxiosError", err);
       setMessage("❌ Failed to fetch notifications.");
@@ -25,31 +25,28 @@ export default function Notifications() {
   }, [token]);
 
   return (
-    <div className="notifications-page" style={{ textAlign: "center", padding: "20px" }}>
-      <h3>🔔 Notifications</h3>
-      {message && <p style={{ color: "red" }}>{message}</p>}
+    <div className="max-w-3xl mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4 text-center">🔔 Notifications</h2>
+
+      {message && (
+        <p className={`mb-4 text-center font-medium ${message.startsWith("❌") ? "text-red-600" : "text-green-600"}`}>
+          {message}
+        </p>
+      )}
 
       {notifications.length === 0 ? (
-        <p>No new notifications.</p>
+        <p className="text-center text-gray-600">No new notifications.</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="space-y-3">
           {notifications.map((note) => (
             <li
               key={note.id}
-              style={{
-                background: "#1a1a1a",
-                color: "#fff",
-                padding: "10px",
-                marginBottom: "10px",
-                borderRadius: "8px",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-              }}
+              className="bg-gray-800 text-white p-4 rounded-lg shadow-md hover:bg-gray-700 transition duration-200"
             >
-              <span>{note.message}</span>
-              <br />
-              <span style={{ color: "#aaa", fontSize: "12px" }}>
+              <p>{note.message}</p>
+              <p className="text-gray-400 text-sm mt-1">
                 {new Date(note.timestamp).toLocaleString()}
-              </span>
+              </p>
             </li>
           ))}
         </ul>

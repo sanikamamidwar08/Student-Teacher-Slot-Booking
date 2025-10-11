@@ -1,87 +1,80 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "@fortawesome/fontawesome-free/css/all.min.css"; // for icons
-import "../App.css";
+import "../App.css"; // Make sure your CSS includes login-page and login-card styles
 
 export default function Login() {
-  const [form, setForm] = useState({ username: "", password: "" });
-  const [message, setMessage] = useState("");
+  const [username, setUsername] = useState(""); // Django default is username
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Input change handler
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-  // Login handler
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
+    setError("");
+
     try {
-      // Request JWT token
-      const res = await axios.post("http://127.0.0.1:8000/api/token/", form, {
-        headers: { "Content-Type": "application/json" },
+      // 1️⃣ Login: Get JWT token
+      const tokenResponse = await axios.post("http://127.0.0.1:8000/api/token/", {
+        username,
+        password,
       });
 
-      localStorage.setItem("access_token", res.data.access);
-      localStorage.setItem("refresh_token", res.data.refresh);
+      const { access, refresh } = tokenResponse.data;
 
-      // Fetch current user info
-      const profileRes = await axios.get("http://127.0.0.1:8000/api/me/", {
-        headers: { Authorization: `Bearer ${res.data.access}` },
+      // Store tokens in localStorage
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+
+      // 2️⃣ Get current user info (role, etc.)
+      const userResponse = await axios.get("http://127.0.0.1:8000/api/me/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
       });
 
-      const role = profileRes.data.role;
-      localStorage.setItem("role", role);
+      const user = userResponse.data;
+      localStorage.setItem("role", user.role);
 
-      setMessage("✅ Login successful! Redirecting...");
-
-      setTimeout(() => {
-        if (role === "teacher") navigate("/teacher/dashboard");
-        else navigate("/student/dashboard");
-      }, 1000);
-    } catch (error) {
-      console.error("Login Error:", error);
-      const errMsg = error.response?.data
-        ? JSON.stringify(error.response.data)
-        : "Server error";
-      setMessage("❌ Login failed: " + errMsg);
+      // 3️⃣ Redirect based on role
+      if (user.role === "teacher") {
+        navigate("/teacher/dashboard");
+      } else {
+        navigate("/student/dashboard");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Invalid credentials. Please try again."); // Show user-friendly message
     }
   };
 
   return (
     <div className="login-page">
       <div className="login-card">
-        <h2>Welcome Back</h2>
+        <h2>Login</h2>
+        {error && <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>}
 
-        {/* Success/Error Message */}
-        {message && (
-          <p style={{ color: message.startsWith("✅") ? "lightgreen" : "#ff8080" }}>
-            {message}
-          </p>
-        )}
-
-        <form onSubmit={handleLogin} className="form-box">
+        <form onSubmit={handleSubmit} className="form-box">
+          {/* Username */}
           <div className="input-wrapper">
             <i className="fas fa-user"></i>
             <input
               type="text"
-              name="username"
               placeholder="Username"
-              value={form.username}
-              onChange={handleChange}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
 
+          {/* Password */}
           <div className="input-wrapper">
             <i className="fas fa-lock"></i>
             <input
               type="password"
-              name="password"
               placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
@@ -89,9 +82,14 @@ export default function Login() {
           <button type="submit">Login</button>
         </form>
 
-        {/* Register Link */}
         <p className="login-link">
-          Don’t have an account? <a href="/register">Register</a>
+          Don’t have an account?{" "}
+          <span
+            onClick={() => navigate("/register")}
+            style={{ cursor: "pointer", color: "#ffea00" }}
+          >
+            Register here
+          </span>
         </p>
       </div>
     </div>

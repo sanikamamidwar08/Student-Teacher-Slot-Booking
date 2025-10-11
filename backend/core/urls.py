@@ -11,20 +11,21 @@ from .views import (
     StudentTeachersView,
     NotificationsView,
     TeacherBookingsView,
+    CustomTokenObtainPairView,  # <-- custom JWT login with role
 )
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     # Auth
     path("register/", RegisterView.as_view(), name="register"),
-    path("token/", TokenObtainPairView.as_view(), name="login"),
+    path("token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),  # POST to login
     path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
     # Teacher: Manage slots
     path("teacher/slots/", TimeSlotListCreateView.as_view(), name="teacher-slots"),
     path("teacher/slots/<int:pk>/", TimeSlotDetailView.as_view(), name="teacher-slot-detail"),
 
-    # Teacher: View bookings for their slots
+    # Teacher: View bookings
     path("teacher/bookings/", TeacherBookingsView.as_view(), name="teacher-bookings"),
 
     # Student: Available slots & booking

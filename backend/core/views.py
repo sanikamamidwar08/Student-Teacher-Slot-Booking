@@ -10,8 +10,30 @@ from .serializers import (
     NotificationSerializer,
 )
 from .models import TimeSlot, Booking, Notification
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
+
+# -------------------------
+# Custom JWT login with role
+# -------------------------
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claim for role
+        token['role'] = user.role
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['role'] = self.user.role
+        return data
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
 
 # -------------------------
 # Register
@@ -19,6 +41,7 @@ User = get_user_model()
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
+
 
 # -------------------------
 # Teacher: Manage slots
@@ -32,8 +55,7 @@ class TimeSlotListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         slot = serializer.save(teacher=self.request.user)
-
-        # Notify all students about new lecture
+        # Notify all students
         students = User.objects.filter(role='student')
         for student in students:
             Notification.objects.create(
@@ -49,7 +71,6 @@ class TimeSlotDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         slot = serializer.save()
-        # Notify students about updated lecture
         students = User.objects.filter(role='student')
         for student in students:
             Notification.objects.create(
@@ -59,7 +80,6 @@ class TimeSlotDetailView(generics.RetrieveUpdateDestroyAPIView):
             )
 
     def perform_destroy(self, instance):
-        # Notify students about deleted lecture
         students = User.objects.filter(role='student')
         for student in students:
             Notification.objects.create(
@@ -68,6 +88,7 @@ class TimeSlotDetailView(generics.RetrieveUpdateDestroyAPIView):
                         f"on {instance.date} ({instance.start_time}-{instance.end_time}) was deleted"
             )
         instance.delete()
+
 
 # -------------------------
 # Student: Available slots
@@ -78,6 +99,7 @@ class AvailableSlotsView(generics.ListAPIView):
 
     def get_queryset(self):
         return TimeSlot.objects.filter(is_booked=False, is_available=True)
+
 
 # -------------------------
 # Student: Book slot
@@ -91,13 +113,13 @@ class BookingCreateView(generics.CreateAPIView):
         slot = booking.slot
         slot.is_booked = True
         slot.save()
-
-        # Notify teacher about new booking
+        # Notify teacher
         Notification.objects.create(
             user=slot.teacher,
             message=f"📅 New booking by {self.request.user.full_name or self.request.user.username} "
                     f"on {slot.date} ({slot.start_time}-{slot.end_time})"
         )
+
 
 # -------------------------
 # Student: My bookings
@@ -108,6 +130,7 @@ class MyBookingsView(generics.ListAPIView):
 
     def get_queryset(self):
         return Booking.objects.filter(student=self.request.user).select_related('slot', 'student')
+
 
 # -------------------------
 # Student: Cancel booking
@@ -123,20 +146,18 @@ class MyBookingDetailView(generics.RetrieveDestroyAPIView):
         slot = instance.slot
         teacher = slot.teacher
         student = instance.student
-
-        # Notify teacher about cancellation
         Notification.objects.create(
             user=teacher,
             message=f"❌ {student.full_name or student.username} cancelled booking on {slot.date} "
                     f"({slot.start_time}-{slot.end_time})"
         )
-
         slot.is_booked = False
         slot.save()
         instance.delete()
 
+
 # -------------------------
-# Teacher: View bookings for their slots
+# Teacher: View bookings
 # -------------------------
 class TeacherBookingsView(generics.ListAPIView):
     serializer_class = BookingSerializer
@@ -144,6 +165,7 @@ class TeacherBookingsView(generics.ListAPIView):
 
     def get_queryset(self):
         return Booking.objects.filter(slot__teacher=self.request.user).select_related('slot', 'student')
+
 
 # -------------------------
 # Student: List all teachers
@@ -155,8 +177,9 @@ class StudentTeachersView(generics.ListAPIView):
     def get_queryset(self):
         return User.objects.filter(role='teacher')
 
+
 # -------------------------
-# Notifications (student & teacher)
+# Notifications
 # -------------------------
 class NotificationsView(generics.ListAPIView):
     serializer_class = NotificationSerializer
@@ -165,8 +188,9 @@ class NotificationsView(generics.ListAPIView):
     def get_queryset(self):
         return Notification.objects.filter(user=self.request.user).order_by('-timestamp')
 
+
 # -------------------------
-# Current logged-in user info
+# Current logged-in user
 # -------------------------
 class CurrentUserView(APIView):
     permission_classes = [permissions.IsAuthenticated]

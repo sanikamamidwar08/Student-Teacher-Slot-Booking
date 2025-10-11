@@ -11,7 +11,6 @@ export default function ChangeSchedule() {
   const token = localStorage.getItem("access_token");
   if (token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-  // Fetch all slots
   const fetchSlots = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8000/api/teacher/slots/");
@@ -30,18 +29,14 @@ export default function ChangeSchedule() {
     setEditingSlot({ ...editingSlot, [e.target.name]: e.target.value });
   };
 
-  // Compute end_time from start_time + duration
   const computeEndTime = (start, duration) => {
     const [hours, minutes] = start.split(":").map(Number);
     const end = new Date();
     end.setHours(hours);
     end.setMinutes(minutes + Number(duration));
-    return `${String(end.getHours()).padStart(2, "0")}:${String(
-      end.getMinutes()
-    ).padStart(2, "0")}`;
+    return `${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}`;
   };
 
-  // Update slot
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingSlot) return;
@@ -54,12 +49,8 @@ export default function ChangeSchedule() {
     };
 
     try {
-      await axios.patch(
-        `http://127.0.0.1:8000/api/teacher/slots/${editingSlot.id}/`,
-        payload
-      );
+      await axios.patch(`http://127.0.0.1:8000/api/teacher/slots/${editingSlot.id}/`, payload);
 
-      // If slot was booked → send notification
       if (editingSlot.is_booked) {
         await axios.post("http://127.0.0.1:8000/api/teacher/notify-student/", {
           slot_id: editingSlot.id,
@@ -76,22 +67,13 @@ export default function ChangeSchedule() {
     }
   };
 
-  // Delete slot
   const handleDelete = async (slot) => {
-    if (
-      slot.is_booked &&
-      !window.confirm(
-        "⚠️ This slot is booked. Do you want to delete it? Student will be notified."
-      )
-    )
+    if (slot.is_booked && !window.confirm("⚠️ This slot is booked. Student will be notified."))
       return;
 
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/teacher/slots/${slot.id}/`
-      );
+      await axios.delete(`http://127.0.0.1:8000/api/teacher/slots/${slot.id}/`);
 
-      // Notify student if booked
       if (slot.is_booked) {
         await axios.post("http://127.0.0.1:8000/api/teacher/notify-student/", {
           slot_id: slot.id,
@@ -108,99 +90,109 @@ export default function ChangeSchedule() {
   };
 
   return (
-    <div className="change-schedule-page">
-      <h3>Change Schedule</h3>
-      {message && <p style={{ color: message.includes("❌") ? "red" : "green" }}>{message}</p>}
+    <div className="max-w-4xl mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">Change Schedule</h2>
+      {message && (
+        <p className={`mb-4 font-medium ${message.startsWith("❌") ? "text-red-600" : "text-green-600"}`}>
+          {message}
+        </p>
+      )}
 
       {/* Slots Table */}
-      <table className="slot-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Topic</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {slots.map((slot) => (
-            <tr key={slot.id}>
-              <td>{slot.date}</td>
-              <td>{slot.start_time}</td>
-              <td>{slot.end_time}</td>
-              <td>{slot.topic || "N/A"}</td>
-              <td>{slot.is_booked ? "📌 Booked" : "✅ Available"}</td>
-              <td>
-                <button
-                  className="edit-btn"
-                  onClick={() => setEditingSlot(slot)}
-                >
-                  ✏️ Edit
-                </button>
-                <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(slot)}
-                >
-                  ❌ Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto mb-6">
+        <table className="min-w-full bg-white shadow rounded-lg">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-2 text-left">Date</th>
+              <th className="px-4 py-2 text-left">Start</th>
+              <th className="px-4 py-2 text-left">End</th>
+              <th className="px-4 py-2 text-left">Topic</th>
+              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 text-left">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {slots.map((slot) => (
+              <tr key={slot.id} className="border-b hover:bg-gray-50">
+                <td className="px-4 py-2">{slot.date}</td>
+                <td className="px-4 py-2">{slot.start_time}</td>
+                <td className="px-4 py-2">{slot.end_time}</td>
+                <td className="px-4 py-2">{slot.topic || "N/A"}</td>
+                <td className="px-4 py-2">{slot.is_booked ? "📌 Booked" : "✅ Available"}</td>
+                <td className="px-4 py-2 flex gap-2">
+                  <button
+                    className="bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
+                    onClick={() => setEditingSlot(slot)}
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    onClick={() => handleDelete(slot)}
+                  >
+                    ❌ Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Edit Form */}
       {editingSlot && (
-        <form className="form-box edit-form" onSubmit={handleUpdate}>
-          <h4>Edit Slot: {editingSlot.date}</h4>
+        <form className="bg-white p-4 rounded shadow-md space-y-3" onSubmit={handleUpdate}>
+          <h3 className="text-lg font-semibold mb-2">Edit Slot: {editingSlot.date}</h3>
 
-          <label>Date:</label>
-          <input
-            type="date"
-            name="date"
-            value={editingSlot.date}
-            onChange={handleChange}
-            required
-          />
+          <div className="flex flex-col md:flex-row gap-3">
+            <input
+              type="date"
+              name="date"
+              value={editingSlot.date}
+              onChange={handleChange}
+              className="border rounded px-3 py-2 flex-1"
+              required
+            />
+            <input
+              type="time"
+              name="start_time"
+              value={editingSlot.start_time}
+              onChange={handleChange}
+              className="border rounded px-3 py-2 flex-1"
+              required
+            />
+            <input
+              type="number"
+              name="duration"
+              value={editingSlot.duration || 30}
+              onChange={handleChange}
+              min="30"
+              max="60"
+              className="border rounded px-3 py-2 flex-1"
+              placeholder="Duration (min)"
+              required
+            />
+          </div>
 
-          <label>Start Time:</label>
-          <input
-            type="time"
-            name="start_time"
-            value={editingSlot.start_time}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Duration (minutes):</label>
-          <input
-            type="number"
-            name="duration"
-            value={editingSlot.duration || 30}
-            onChange={handleChange}
-            min="30"
-            max="60"
-            required
-          />
-
-          <label>Topic (optional):</label>
           <input
             type="text"
             name="topic"
             value={editingSlot.topic}
             onChange={handleChange}
-            placeholder="Topic"
+            placeholder="Topic (optional)"
+            className="border rounded px-3 py-2 w-full"
           />
 
-          <div className="form-actions">
-            <button type="submit" className="save-btn">
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            >
               💾 Update Slot
             </button>
             <button
               type="button"
-              className="cancel-btn"
+              className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
               onClick={() => setEditingSlot(null)}
             >
               Cancel

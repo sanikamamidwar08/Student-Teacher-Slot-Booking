@@ -69,26 +69,40 @@ export default function UpdateSchedule() {
       fetchSlots();
     } catch (err) {
       console.error(err);
-      if (err.response?.status === 401) setMessage("❌ Unauthorized. Please login.");
-      else setMessage("❌ Failed to add slot.");
+      setMessage(
+        err.response?.status === 401
+          ? "❌ Unauthorized. Please login."
+          : "❌ Failed to add slot."
+      );
     }
   };
 
   return (
-    <div className="update-schedule-page">
-      <h3>Update Schedule</h3>
+    <div className="max-w-4xl mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">➕ Update Schedule</h2>
+
       {message && (
-        <p style={{ color: message.includes("❌") ? "red" : "green" }}>{message}</p>
+        <p
+          className={`mb-4 font-medium ${
+            message.startsWith("❌") ? "text-red-600" : "text-green-600"
+          }`}
+        >
+          {message}
+        </p>
       )}
 
       {/* Add Slot Form */}
-      <form className="form-box update-form" onSubmit={handleSubmit}>
+      <form
+        className="bg-gray-50 p-4 rounded-lg shadow-md mb-6 grid grid-cols-1 md:grid-cols-2 gap-4"
+        onSubmit={handleSubmit}
+      >
         <input
           type="date"
           name="date"
           value={formSlot.date}
           onChange={handleChange}
           required
+          className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <input
           type="time"
@@ -96,67 +110,82 @@ export default function UpdateSchedule() {
           value={formSlot.start_time}
           onChange={handleChange}
           required
+          className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
-
-        <select name="duration" value={formSlot.duration} onChange={handleChange}>
+        <select
+          name="duration"
+          value={formSlot.duration}
+          onChange={handleChange}
+          className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
           <option value="30">30 Minutes</option>
           <option value="45">45 Minutes</option>
           <option value="60">60 Minutes</option>
         </select>
-
         <input
           type="text"
           name="topic"
           value={formSlot.topic}
           onChange={handleChange}
           placeholder="Topic (optional)"
+          className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
-
-        <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <label className="flex items-center gap-2 md:col-span-2">
           <input
             type="checkbox"
             name="is_available"
             checked={formSlot.is_available}
             onChange={handleChange}
+            className="w-4 h-4"
           />
           Mark as Available
         </label>
-
-        <button type="submit">➕ Add Slot</button>
+        <button
+          type="submit"
+          className="md:col-span-2 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+        >
+          ➕ Add Slot
+        </button>
       </form>
 
       {/* Existing Slots */}
-      <h4>Existing Slots</h4>
-      <table className="slot-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Duration</th>
-            <th>Topic</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {slots.map((slot) => (
-            <tr key={slot.id}>
-              <td>{slot.date}</td>
-              <td>{slot.start_time}</td>
-              <td>{slot.end_time}</td>
-              <td>{slot.duration || "N/A"} min</td>
-              <td>{slot.topic || "N/A"}</td>
-              <td>
-                {slot.is_booked
-                  ? "📚 Booked by Student"
-                  : slot.is_available
-                  ? "✅ Available"
-                  : "❌ Unavailable"}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h3 className="text-xl font-semibold mb-2">📅 Existing Slots</h3>
+      {slots.length === 0 ? (
+        <p className="text-gray-600">No slots added yet.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border rounded-lg shadow-sm">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="py-2 px-3 text-left">Date</th>
+                <th className="py-2 px-3 text-left">Start</th>
+                <th className="py-2 px-3 text-left">End</th>
+                <th className="py-2 px-3 text-left">Duration</th>
+                <th className="py-2 px-3 text-left">Topic</th>
+                <th className="py-2 px-3 text-left">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {slots.map((slot) => (
+                <tr key={slot.id} className="border-b hover:bg-gray-50">
+                  <td className="py-2 px-3">{slot.date}</td>
+                  <td className="py-2 px-3">{slot.start_time}</td>
+                  <td className="py-2 px-3">{slot.end_time}</td>
+                  <td className="py-2 px-3">{slot.duration || "N/A"} min</td>
+                  <td className="py-2 px-3">{slot.topic || "N/A"}</td>
+                  <td className="py-2 px-3">
+                    {slot.is_booked
+                      ? "📚 Booked by Student"
+                      : slot.is_available
+                      ? "✅ Available"
+                      : "❌ Unavailable"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

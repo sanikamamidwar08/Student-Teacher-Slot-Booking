@@ -18,42 +18,36 @@ export default function StudentDashboard() {
     if (!token) setMessage("⚠️ No access token found. Please login first.");
   }, [token]);
 
+  const sidebarItems = [
+    { id: "teachers", label: "👨‍🏫 View Teachers" },
+    { id: "book", label: "📅 Book Slot" },
+    { id: "myBookings", label: "📖 My Bookings" },
+    { id: "notifications", label: "🔔 Notifications" },
+  ];
+
   return (
-    <div className="dashboard-container">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="dashboard-sidebar">
-        <h2>Student Dashboard</h2>
-        <ul>
-          <li
-            className={activePage === "teachers" ? "active" : ""}
-            onClick={() => setActivePage("teachers")}
-          >
-            👨‍🏫 View Teachers
-          </li>
-          <li
-            className={activePage === "book" ? "active" : ""}
-            onClick={() => setActivePage("book")}
-          >
-            📅 Book Slot
-          </li>
-          <li
-            className={activePage === "myBookings" ? "active" : ""}
-            onClick={() => setActivePage("myBookings")}
-          >
-            📖 My Bookings
-          </li>
-          <li
-            className={activePage === "notifications" ? "active" : ""}
-            onClick={() => setActivePage("notifications")}
-          >
-            🔔 Notifications
-          </li>
+      <aside className="w-64 bg-white shadow-md p-4">
+        <h2 className="text-xl font-bold mb-6 text-center">Student Dashboard</h2>
+        <ul className="space-y-2">
+          {sidebarItems.map((item) => (
+            <li
+              key={item.id}
+              onClick={() => setActivePage(item.id)}
+              className={`cursor-pointer px-3 py-2 rounded-md hover:bg-indigo-100 ${
+                activePage === item.id ? "bg-indigo-600 text-white font-semibold" : "text-gray-700"
+              }`}
+            >
+              {item.label}
+            </li>
+          ))}
         </ul>
       </aside>
 
       {/* Main Content */}
-      <main className="dashboard-content">
-        {message && <p style={{ color: "red" }}>{message}</p>}
+      <main className="flex-1 p-6">
+        {message && <p className="text-red-600 mb-4">{message}</p>}
 
         {activePage === "teachers" && <ViewTeachers />}
         {activePage === "book" && <BookSlot />}
