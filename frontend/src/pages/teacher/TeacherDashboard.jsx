@@ -7,7 +7,7 @@ import ChangeSchedule from "./ChangeSchedule";
 import ViewBookings from "./ViewBookings";
 import Notifications from "./Notifications";
 import axios from "axios";
-import "../../App.css";
+import "./TeacherDashboard.css";
 
 export default function TeacherDashboard() {
   const [activePage, setActivePage] = useState("view");
@@ -31,50 +31,41 @@ export default function TeacherDashboard() {
   }, [token, role, navigate]);
 
   const menuItems = [
-    { id: "view", label: "📅 View Schedule" },
-    { id: "update", label: "➕ Update Schedule" },
-    { id: "change", label: "✏️ Change Schedule" },
-    { id: "bookings", label: "📖 View Bookings" },
-    { id: "notifications", label: "🔔 Notifications" },
+    { id: "view", icon: "📅", label: "View Schedule" },
+    { id: "update", icon: "➕", label: "Update Schedule" },
+    { id: "change", icon: "✏️", label: "Change Schedule" },
+    { id: "bookings", icon: "📖", label: "View Bookings" },
+    { id: "notifications", icon: "🔔", label: "Notifications" },
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="dashboard-container">
       {/* Sidebar */}
-      <aside
-        className={`bg-white shadow-md transition-all duration-300 ${
-          sidebarOpen ? "w-64" : "w-16"
-        }`}
-      >
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className={`font-bold text-lg ${sidebarOpen ? "block" : "hidden"}`}>
-            👩‍🏫 Teacher
-          </h2>
-          <button
-            className="text-gray-500 hover:text-gray-700"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
+      <aside className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
+        <div className="sidebar-header">
+          <h2 className={`${sidebarOpen ? "block" : "hidden"}`}>👩‍🏫 Teacher</h2>
+          <button className="toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? "◀" : "▶"}
           </button>
         </div>
-        <ul className="mt-4">
+
+        <ul className="menu-list">
           {menuItems.map((item) => (
             <li
               key={item.id}
-              className={`cursor-pointer px-4 py-2 hover:bg-indigo-100 rounded-l-lg transition ${
-                activePage === item.id ? "bg-indigo-200 font-semibold" : ""
-              }`}
+              className={`menu-item ${activePage === item.id ? "active" : ""}`}
               onClick={() => setActivePage(item.id)}
             >
-              {sidebarOpen ? item.label : item.label.split(" ")[0]}
+              <span className="menu-icon">{item.icon}</span>
+              {sidebarOpen && <span className="menu-label">{item.label}</span>}
             </li>
           ))}
         </ul>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6">
-        {message && <p className="text-red-600 mb-4 font-medium">{message}</p>}
+      <main className="main-content">
+        {message && <p className="message-box">{message}</p>}
 
         {activePage === "view" && <ViewSchedule />}
         {activePage === "update" && <UpdateSchedule />}
