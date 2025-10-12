@@ -46,6 +46,12 @@ MIDDLEWARE = [
 
 # ===== CORS =====
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://slot-booking-api-vazl.onrender.com",
+    "http://localhost:3000",
+   
+    "https://student-teacher-slot-booking.vercel.app", 
+]
 
 # ===== REST FRAMEWORK =====
 REST_FRAMEWORK = {
