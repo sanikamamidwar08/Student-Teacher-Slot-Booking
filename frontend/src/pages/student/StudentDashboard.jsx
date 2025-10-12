@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import ViewTeachers from "./ViewTeachers";
-import BookSlot from "./BookSlot";
-import MyBookings from "./MyBookings";
-import Notifications from "./Notifications";
-import Footer from "../../components/Footer";
+import ViewTeachers from "./ViewTeachers.jsx";
+import BookSlot from "./BookSlot.jsx";
+import MyBookings from "./MyBookings.jsx";
+import Notifications from "./Notifications.jsx";
+import Footer from "../../components/Footer.jsx";
 import "./StudentDashborad.css";
 import axios from "axios";
 

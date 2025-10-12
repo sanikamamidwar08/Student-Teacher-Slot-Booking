@@ -1,11 +1,11 @@
 // src/pages/teacher/TeacherDashboard.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ViewSchedule from "./ViewSchedule";
-import UpdateSchedule from "./UpdateSchedule";
-import ChangeSchedule from "./ChangeSchedule";
-import ViewBookings from "./ViewBookings";
-import Notifications from "./Notifications";
+import ViewSchedule from "./ViewSchedule.jsx";
+import UpdateSchedule from "./UpdateSchedule.jsx";
+import ChangeSchedule from "./ChangeSchedule.jsx";
+import ViewBookings from "./ViewBookings.jsx";
+import Notifications from "./Notifications.jsx";
 import axios from "axios";
 import "./TeacherDashboard.css";
 

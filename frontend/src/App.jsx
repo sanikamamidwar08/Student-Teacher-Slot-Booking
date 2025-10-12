@@ -1,11 +1,11 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Logout from "./pages/Logout";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Logout from "./pages/Logout.jsx";
 
 // Student Pages
 import StudentDashboard from "./pages/student/StudentDashboard";
