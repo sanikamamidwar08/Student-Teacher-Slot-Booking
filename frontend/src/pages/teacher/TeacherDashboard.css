@@ -1,0 +1,141 @@
+/* 🌸 Teacher Dashboard CSS - Modern Glassmorphism Style */
+
+/* ===== Layout ===== */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8, #e0e7ff); /* Page background */
+  transition: all 0.3s ease-in-out;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  transition: width 0.4s ease, background 0.3s;
+  overflow: hidden;
+}
+
+.sidebar.open { width: 260px; }
+.sidebar.closed { width: 70px; }
+
+/* ===== Sidebar Header ===== */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.sidebar-header h2 {
+  font-weight: 700;
+  font-size: 1.2rem;
+  transition: opacity 0.4s ease;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.toggle-btn:hover { transform: rotate(90deg); }
+
+/* ===== Sidebar Menu ===== */
+.menu-list {
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.2rem;
+  margin: 0.3rem 0;
+  border-radius: 10px;
+  color: #334155;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.menu-item:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: #3730a3;
+  transform: translateX(5px);
+}
+
+.menu-item.active {
+  background: linear-gradient(90deg, #818cf8, #a5b4fc);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.3);
+}
+
+/* ===== Icon + Label Styling ===== */
+.menu-icon {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+}
+
+.menu-label {
+  font-size: 0.95rem;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar.closed .menu-label {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+/* ===== Main Content ===== */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background: linear-gradient(to bottom right, #f8fafc, #eef2ff);
+  overflow-y: auto;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* ===== Message Box ===== */
+.message-box {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #ef4444;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  animation: slideDown 0.5s ease;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .dashboard-container { flex-direction: column; }
+  .sidebar { width: 100%; position: sticky; top: 0; z-index: 100; }
+  .main-content { padding: 1.5rem; }
+} 
