@@ -8,12 +8,12 @@ import Register from "./pages/Register.jsx";
 import Logout from "./pages/Logout.jsx";
 
 // Student Pages
-import StudentDashboard from "./pages/student/StudentDashboard";
+import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 import ViewTeachers from "./pages/student/ViewTeachers";
 import BookSlot from "./pages/student/BookSlot";
 
 // Teacher Pages
-import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import TeacherDashboard from "./pages/teacher/TeacherDashboard.jsx";
 
 // Optional: Font Awesome
 import "@fortawesome/fontawesome-free/css/all.min.css";
