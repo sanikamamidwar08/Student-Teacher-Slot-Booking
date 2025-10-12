@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../App.css"; // Make sure your CSS includes login-page and login-card styles
+import "./Loging.css";
 
 export default function Login() {
   const [username, setUsername] = useState(""); // Django default is username
@@ -50,6 +50,12 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      <ul>
+  {Array.from({ length: 10 }).map((_, i) => (
+    <li key={i}></li>
+  ))}
+</ul>
+
       <div className="login-card">
         <h2>Login</h2>
         {error && <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>}
