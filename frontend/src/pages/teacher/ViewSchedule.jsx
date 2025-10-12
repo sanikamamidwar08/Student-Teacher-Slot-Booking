@@ -1,7 +1,7 @@
 // src/pages/teacher/ViewSchedule.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../../App.css";
+import "./ViewSchedule.css";
 
 export default function ViewSchedule() {
   const [slots, setSlots] = useState([]);
