@@ -1,19 +1,19 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header.jsx";
-import Footer from "./components/Footer.jsx";
-import Home from "./src/pages/Home.jsx"; 
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import Logout from "./pages/Logout.jsx";
+import Header from "../src/pages/components/Header.jsx";
+import Footer from "../src/pages/components/Footer.jsx";
+import Home from "../src/pages/Home.jsx"; 
+import Login from "../src/pages/pages/Login.jsx";
+import Register from "../src/pages/pages/Register.jsx";
+import Logout from "../src/pages/pages/Logout.jsx";
 
 // Student Pages
-import StudentDashboard from "./pages/student/StudentDashboard.jsx";
-import ViewTeachers from "./pages/student/ViewTeachers";
-import BookSlot from "./pages/student/BookSlot";
+import StudentDashboard from "../src/pages/pages/student/StudentDashboard.jsx";
+import ViewTeachers from "../src/pages/pages/student/ViewTeachers";
+import BookSlot from "../src/pages/pages/student/BookSlot";
 
 // Teacher Pages
-import TeacherDashboard from "./pages/teacher/TeacherDashboard.jsx";
+import TeacherDashboard from "../src/pages/pages/teacher/TeacherDashboard.jsx";
 
 // Optional: Font Awesome
 import "@fortawesome/fontawesome-free/css/all.min.css";
