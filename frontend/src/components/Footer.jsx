@@ -1,6 +1,5 @@
 // src/components/Footer.jsx
-import "../App.css";
-
+import "./Footer.css"
 export default function Footer() {
   return (
     <footer className="footer bg-gray-800 text-white py-4 mt-8 text-center shadow-inner">

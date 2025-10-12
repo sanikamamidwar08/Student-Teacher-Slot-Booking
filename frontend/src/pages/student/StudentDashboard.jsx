@@ -1,17 +1,20 @@
-// src/pages/student/StudentDashboard.jsx
 import { useState, useEffect } from "react";
 import ViewTeachers from "./ViewTeachers";
 import BookSlot from "./BookSlot";
 import MyBookings from "./MyBookings";
 import Notifications from "./Notifications";
-import "../../App.css";
+import Footer from "../../components/Footer";
+import "./StudentDashborad.css";
 import axios from "axios";
 
 export default function StudentDashboard() {
   const [activePage, setActivePage] = useState("teachers");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [message, setMessage] = useState("");
 
   const token = localStorage.getItem("access_token");
+  const studentName = localStorage.getItem("username") || "Student";
+
   if (token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   useEffect(() => {
@@ -26,34 +29,42 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-md p-4">
-        <h2 className="text-xl font-bold mb-6 text-center">Student Dashboard</h2>
-        <ul className="space-y-2">
-          {sidebarItems.map((item) => (
-            <li
-              key={item.id}
-              onClick={() => setActivePage(item.id)}
-              className={`cursor-pointer px-3 py-2 rounded-md hover:bg-indigo-100 ${
-                activePage === item.id ? "bg-indigo-600 text-white font-semibold" : "text-gray-700"
-              }`}
-            >
-              {item.label}
-            </li>
-          ))}
-        </ul>
-      </aside>
+    <div className="dashboard-container">
+      <div className="content-wrapper">
+        {/* Sidebar */}
+        <aside className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
+          <div className="sidebar-header">
+            <h2>{sidebarOpen ? studentName : ""}</h2>
+            <button className="toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+              {sidebarOpen ? "◀" : "▶"}
+            </button>
+          </div>
+          <ul className="menu-list">
+            {sidebarItems.map((item) => (
+              <li
+                key={item.id}
+                className={`menu-item ${activePage === item.id ? "active" : ""}`}
+                onClick={() => setActivePage(item.id)}
+              >
+                <span className="menu-icon">{item.label.split(" ")[0]}</span>
+                <span className="menu-label">{sidebarOpen ? item.label : ""}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        {message && <p className="text-red-600 mb-4">{message}</p>}
+        {/* Main Content */}
+        <main className="main-content">
+          {message && <div className="message-box">{message}</div>}
 
-        {activePage === "teachers" && <ViewTeachers />}
-        {activePage === "book" && <BookSlot />}
-        {activePage === "myBookings" && <MyBookings />}
-        {activePage === "notifications" && <Notifications />}
-      </main>
+          {activePage === "teachers" && <ViewTeachers />}
+          {activePage === "book" && <BookSlot />}
+          {activePage === "myBookings" && <MyBookings />}
+          {activePage === "notifications" && <Notifications />}
+
+          <Footer />
+        </main>
+      </div>
     </div>
   );
 }

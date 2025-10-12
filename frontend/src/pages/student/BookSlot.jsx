@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../../App.css";
+import "./BookSlot.css";
+import "../../components/Footer.css"
 
 export default function BookSlot() {
   const location = useLocation();
